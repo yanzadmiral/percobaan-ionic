@@ -15,7 +15,7 @@
       <ExploreContainer name="Tab 2 page" />
     </ion-content>
     <ion-content :fullscreen="true">
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="center" name="fixed">
     <ion-fab-button @click="takePhoto()">
       <ion-icon :icon="camera"></ion-icon>
     </ion-fab-button>
