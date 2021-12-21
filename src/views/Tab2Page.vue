@@ -6,26 +6,27 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Tab 2</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      
-      <ExploreContainer name="Tab 2 page" />
+      <ion-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6" :key="photo" v-for="photo in photos">
+              <ion-img :src="photo.webviewPath"></ion-img>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-fab vertical="bottom" horizontal="center" name="fixed">
+        <ion-fab-button @click="takePhoto()">
+          <ion-icon :icon="camera"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      </ion-content>
     </ion-content>
-    <ion-content :fullscreen="true">
-  <ion-fab vertical="bottom" horizontal="center" name="fixed">
-    <ion-fab-button @click="takePhoto()">
-      <ion-icon :icon="camera"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-</ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { camera, trash, close } from 'ionicons/icons';
+import { camera, trash, close } from "ionicons/icons";
 import {
   IonPage,
   IonHeader,
@@ -39,11 +40,11 @@ import {
   IonRow,
   IonCol,
   IonImg,
-} from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+} from "@ionic/vue";
+import { usePhotoGallery } from "@/composables/usePhotoGallery";
 
-export default  {
-  name: 'Tab-2',
+export default {
+  name: "Tab-2",
   components: {
     IonPage,
     IonHeader,
@@ -64,14 +65,17 @@ export default  {
     IonCol,
     // eslint-disable-next-line vue/no-unused-components
     IonImg,
-    ExploreContainer
   },
   setup() {
+    const { photos,takePhoto } = usePhotoGallery();
+
     return {
+      photos,
+      takePhoto,
       camera,
       trash,
       close,
     };
   },
-}
+};
 </script>
