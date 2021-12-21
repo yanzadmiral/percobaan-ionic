@@ -11,8 +11,35 @@ export interface UserPhoto {
   }
 
 export function usePhotoGallery() {
-  
+    const PHOTO_STORAGE = 'photos';
+
     const photos = ref<UserPhoto[]>([]);
+    
+    const cachePhotos = () => {
+      Storage.set({
+        key: PHOTO_STORAGE,
+        value: JSON.stringify(photos.value),
+      });
+    };
+    
+    watch(photos, cachePhotos);
+    
+    const loadSaved = async () => {
+      const photoList = await Storage.get({ key: PHOTO_STORAGE });
+      const photosInStorage = photoList.value ? JSON.parse(photoList.value) : [];
+    
+      for (const photo of photosInStorage) {
+        const file = await Filesystem.readFile({
+          path: photo.filepath,
+          directory: Directory.Data,
+        });
+        photo.webviewPath = `data:image/jpeg;base64,${file.data}`;
+      }
+    
+      photos.value = photosInStorage;
+    };
+
+    onMounted(loadSaved);
     
     const convertBlobToBase64 = (blob: Blob) =>
     new Promise((resolve, reject) => {
